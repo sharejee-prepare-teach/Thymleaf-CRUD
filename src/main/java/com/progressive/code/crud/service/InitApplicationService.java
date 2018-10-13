@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.progressive.code.crud.domain.Notes;
 
+import java.util.List;
+
 /**
  * This class is used to initialize some test data when the
  * server starts up.
@@ -29,9 +31,11 @@ public class InitApplicationService {
     @EventListener(ApplicationReadyEvent.class)
     public void initializeTestData() {
         LOGGER.info("Initialize test data");
-
-        notesService.saveNotes(new Notes("Test 1", "Content 1"));
-        notesService.saveNotes(new Notes("Test 2", "Content 2"));
+        List<Notes> notes = notesService.findAll();
+        if (notes == null || notes.size() < 1) {
+            notesService.saveNotes(new Notes("Test 1", "Content 1"));
+            notesService.saveNotes(new Notes("Test 2", "Content 2"));
+        }
 
         LOGGER.info("Initialization completed");
     }
